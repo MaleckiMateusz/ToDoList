@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class todolist extends JFrame{
 	
-	JButton but1;
+	JButton butPlus,butMinus;
 	int countergol = 0;
 	String[] modelA = new String[10];
 	final DefaultListModel model1 = new DefaultListModel();
@@ -50,11 +50,11 @@ public class todolist extends JFrame{
 		//button add
 			ListenForButton lForBut = new ListenForButton();
 			Font  f1  = new Font(Font.SANS_SERIF, Font.PLAIN,  28);
-			but1 = new JButton("+");
-			but1.setFont(f1);
-			but1.addActionListener(lForBut);
-			but1.setPreferredSize(new Dimension(50, 50));
-			thePanel1.add(but1, BorderLayout.WEST);
+			butPlus = new JButton("+");
+			butPlus.setFont(f1);
+			butPlus.addActionListener(lForBut);
+			butPlus.setPreferredSize(new Dimension(50, 50));
+			thePanel1.add(butPlus, BorderLayout.WEST);
 		//button add
 		
 		//date
@@ -67,10 +67,13 @@ public class todolist extends JFrame{
 			thePanel1.add(dateLabel, BorderLayout.CENTER);
 		//date
 		
-		//counter
-			JLabel coutnterLabel = new JLabel(Integer.toString(countergol));
-			thePanel1.add(coutnterLabel, BorderLayout.EAST);
-		//counter
+		//button delete
+			butMinus = new JButton("-");
+			butMinus.setFont(f1);
+			butMinus.addActionListener(lForBut);
+			butMinus.setPreferredSize(new Dimension(50, 50));
+			thePanel1.add(butMinus, BorderLayout.EAST);
+		//button delete
 			
 		//list
 			JPanel Panel1 = new JPanel();
@@ -97,17 +100,18 @@ public class todolist extends JFrame{
 			Panel2.add(Panel1, BorderLayout.NORTH);
 		//list
 			
-		
-		thePanel.add(thePanel1, BorderLayout.NORTH);
-		thePanel.add(thePanel2, BorderLayout.CENTER);
+
+		thePanel.add(thePanel1, BorderLayout.NORTH);  // butAdd, date, counter
+		thePanel.add(thePanel2, BorderLayout.CENTER); // list
 		this.add(thePanel);
 	}
 	
 	public class ListenForButton implements ActionListener {
-
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() == but1){	
+			//add task
+			if(e.getSource() == butPlus){	
 				addPanel tas = new addPanel();
 				String napis = tas.addPanell();
 				if(napis != "") {
@@ -129,6 +133,34 @@ public class todolist extends JFrame{
 				}
 				 
 			}
+			
+			//delete task
+			if(e.getSource() == butMinus){	
+				delPanel del = new delPanel();
+				int delthis = Integer.parseInt(del.delPane());
+				if(delthis < model1.getSize()) { 
+					model1.removeElementAt(delthis); 
+					model1description.removeElementAt(delthis); 
+					counterDate1 -= 1;;
+				}
+				else {
+					delthis -= model1.getSize();
+					if(delthis < model2.getSize()) { 
+						model2.removeElementAt(delthis); 
+						model2description.removeElementAt(delthis); 
+						counterDate2 -= 1;;
+					}
+					else {
+						delthis -= model1.getSize();
+						if(delthis < model3.getSize()) { 
+							model3.removeElementAt(delthis); 
+							model3description.removeElementAt(delthis); 
+							counterDate3 -= 1;;
+						}
+					}
+				}
+			}
+				
 		}
 
 		private DefaultListModel sortDate(DefaultListModel mod, int counterDate, int model) {	
